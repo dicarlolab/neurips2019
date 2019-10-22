@@ -1,0 +1,9 @@
+fire
+numpy
+scipy
+matplotlib
+seaborn
+pandas
+itermplot
+brainscore
+candidate_models
