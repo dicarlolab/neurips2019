@@ -6,6 +6,8 @@ This repository hosts materials for our NeurIPS 2019 publication:
 
 \* Equal contribution
 
+![](figures/fig1.png)
+
 This paper brings forward two major contributions:
 
 - Brain-Score, a framework for evaluating models on integrative brain measurements. Brain-Score allows to quantify how similar models are to brain responses (neural and behavioral). The current Brain-Score leaderboard is available at [Brain-Score.org](https://brain-score.org). If you want to score your own model, use [Brain-Score](https://github.com/brain-score/brain-score) package *(will be made public soon)*

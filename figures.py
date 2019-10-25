@@ -114,9 +114,11 @@ def read_common_data():
     return df
 
 
-def _fig1(df, scale=15):
+def _fig1(df, scale=15, inset=False):
     ax = plt.subplot(111)
     scatterplot(ax, df, x='ImageNet', y='Brain-Score', scale=scale)
+    if not inset:
+        df = df[df.ImageNet < .7]
     r = corr(df, x='ImageNet', y='Brain-Score')
     
     ax.annotate(r, xy=(.75, .1),
@@ -134,7 +136,7 @@ def fig1():
     _fig1(df, scale=15)
     output('fig1')
     plt.figure(figsize=(3, 3))
-    _fig1(df[(df['ImageNet'] >= .7) & (df.Model != 'CORnet-S')], scale=45)
+    _fig1(df[(df['ImageNet'] >= .7) & (df.Model != 'CORnet-S')], scale=45, inset=True)
     output('fig1_inset')
 
 
