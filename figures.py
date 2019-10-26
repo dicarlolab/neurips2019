@@ -142,7 +142,7 @@ def fig1():
 
 def _fig2(ax, df, x, y, title=None, xlabel=None, ylabel=None, index=0, r=None):
     scatterplot(ax, df, x, y)
-    r = corr(df, x, y)
+    r = corr(df[df.Model != 'CORnet-S'], x, y)
     ax.annotate(r, xy=(.75, .1), xycoords='axes fraction', fontsize=10)
     ax.annotate(f"({'abcd'[index]})", xy=(.05 + .24 * index, .9),
                 xycoords='figure fraction', fontsize=20)
