@@ -201,15 +201,22 @@ def fig3():
     output('fig3')
 
 
+def _fig_a1(ax, df, region):
+    x = f'{region} number of features'
+    scatterplot(ax, df, x=x, y=region)
+    r = corr(df[df[x] >= 1000], x, region, report_p=True)
+    print(f'Fig A1: {r}')
+    # ax.annotate(r, xy=(.5, .1), xycoords='axes fraction', fontsize=10)
+    output_paper_quality(ax, xlabel='Number of features', ylabel=f'{region} neural score')
+
+
 def fig_a1():
     df = read_common_data()
     dff = df[(df['V4 number of features'] < 20000) & (df['IT number of features'] < 20000)]
 
     fig, axes = plt.subplots(ncols=2, figsize=(6,3))
-    scatterplot(axes[0], dff, x='V4 number of features', y='V4')
-    output_paper_quality(axes[0], xlabel='Number of features', ylabel='V4 neural score')
-    scatterplot(axes[1], dff, x='IT number of features', y='IT')
-    output_paper_quality(axes[1], xlabel='Number of features', ylabel='IT neural score')
+    _fig_a1(axes[0], dff, region='V4')
+    _fig_a1(axes[1], dff, region='IT')
     output('fig_a1')
 
 
