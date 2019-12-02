@@ -54,12 +54,12 @@ def plot(benchmarks, annotated_models=(), hide_all_but=None, highlight=()):
     scores = scores[[not model.startswith('Base') and not model == 'IamNN' for model in scores['Model']]]
     benchmarks_scores = {benchmark: scores[benchmark] for benchmark in benchmarks}
 
-    fig, ax = pyplot.subplots(figsize=(5, 6))
+    fig, axes = pyplot.subplots(figsize=(5, 7), ncols=len(benchmarks))
     random = RandomState(0)
-    for x_base, benchmark in enumerate(benchmarks, start=1):
+    for i, (ax, benchmark) in enumerate(zip(axes.flatten(), benchmarks)):
         benchmark_scores = benchmarks_scores[benchmark]
         models = scores['Model']
-        x = x_base + random.uniform(-.3, +.3, size=len(benchmark_scores))
+        x = random.uniform(-.3, +.3, size=len(benchmark_scores))
         y = [score for score in benchmark_scores]
         y = [score if not np.isnan(score) else 0 for score in y]
         y = [ceil(score, benchmark) for score in y]
@@ -90,12 +90,15 @@ def plot(benchmarks, annotated_models=(), hide_all_but=None, highlight=()):
             highlight_colors = np.array(colors)[highlight_indices]
             ax.scatter(highlight_x, highlight_y, color=highlight_colors, linewidth=2, edgecolor='orange')
 
-    xticklabels = benchmarks
-    ax.set_xticks(list(range(1, len(xticklabels) + 1)))
-    ax.set_xticklabels(xticklabels)
+        # label
+        ax.set_xticks([0])
+        ax.set_xticklabels([benchmark])
+        if i == 0:
+            ax.set_ylabel('Brain-Score Component Score (normalized)')
+        ax.set_yticks([])
+        ax.grid(False)
+
     pyplot.xticks(rotation=90)
-    ax.set_xlim(np.array(ax.get_xlim()) + [0, 0])
-    ax.set_ylabel('Brain-Score Component Score (normalized)')
     seaborn.despine()
     fig.tight_layout()
     return fig
@@ -106,8 +109,11 @@ if __name__ == '__main__':
     benchmarks = ['V4', 'IT', 'Behavior',
                   # 'OST'
                   ]
-    highlight = 'AlexNet'
-    for show_only, filename in [(None, 'jittered'), ([highlight], f'jittered-{highlight}_only')]:
+    for show_only, highlight, filename in [
+        (None, ['AlexNet'], 'jittered'),
+        (['AlexNet'], ['AlexNet'], f'jittered-AlexNet_only'),
+        (None, ['CORnet-S'], 'jittered-highlight_CORnet-S'),
+    ]:
         fig = plot(benchmarks=benchmarks, hide_all_but=show_only,
-                   highlight=[highlight] if show_only is None else [])
+                   highlight=highlight if show_only is None else [])
         pyplot.savefig(Path(__file__).parent / 'figures' / f"{filename}.png", bbox_inches='tight', dpi=600)
