@@ -1,3 +1,4 @@
+from matplotlib import ticker
 import logging
 import sys
 from pathlib import Path
@@ -95,7 +96,9 @@ def plot(benchmarks, annotated_models=(), hide_all_but=None, highlight=()):
         ax.set_xticklabels([benchmark])
         if i == 0:
             ax.set_ylabel('Brain-Score Component Score (normalized)')
-        ax.set_yticks([])
+        ax.yaxis.set_major_locator(ticker.MultipleLocator(.095))
+        ax.set_yticklabels([f"{tick:.1f}"[1:] for tick in ax.get_yticks()])
+        ax.tick_params(axis='y', which='major', labelsize=10, direction="in", pad=1)
         ax.grid(False)
 
     pyplot.xticks(rotation=90)
